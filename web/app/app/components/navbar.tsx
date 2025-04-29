@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { GiPistolGun } from 'react-icons/gi'; 
+//import { GiPistolGun } from 'react-icons/gi'; 
 import { useState } from 'react';
 
 export default function Navbar() {
@@ -12,7 +12,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
-          <GiPistolGun className="text-purple-500 text-2xl" />
+          {/*<GiPistolGun className="text-purple-500 text-2xl" />*/}
           <span className="text-lg font-bold text-gray-800">Bug_Busters</span>
         </div>
 
