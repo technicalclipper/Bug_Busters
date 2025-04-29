@@ -37,7 +37,7 @@ export default function AskAI() {
       <ToastContainer position="top-center" autoClose={3000} />
 
       <div
-        className="w-[96%] max-w-[1600px] min-h-[92vh] bg-cover bg-center rounded-3xl shadow-xl p-12"
+        className="w-[96%] max-w-[1600px] min-h-[92vh] bg-cover bg-center rounded-3xl shadow-xl p-12 mt-[80px]"
         style={{
           backgroundImage: 'url("/images/bruh.svg")',
         }}
