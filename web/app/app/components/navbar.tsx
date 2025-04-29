@@ -7,7 +7,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="w-4/5 mx-auto bg-white px-6 py-4 shadow-lg rounded-xl border-4 border-gray-300 mt-10 z-50">
+    <nav className="w-4/5 mx-auto bg-white px-6 py-4 shadow-lg rounded-xl border-4 border-gray-300 mt-10 z-50 mb-10  ">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center space-x-2">
@@ -23,7 +23,7 @@ export default function Navbar() {
 
           <Link href="/hunter_dash" className="flex items-center space-x-2 hover:text-black transition-all">
             <img src="/images/dashboard.svg" alt="Dashboard Icon" className="w-7 h-7" />
-            <span className="text-base md:text-lg">Dashboard</span>
+            <span className="text-base md:text-lg">Hunt</span>
           </Link>
 
           <Link href="/ask_ai" className="flex items-center space-x-2 hover:text-black transition-all">

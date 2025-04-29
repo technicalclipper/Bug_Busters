@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #000000;
   --foreground: #171717;
 }
 
@@ -20,15 +20,15 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(to bottom, #000000, #000000);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #ffffff;
 }
+
 
 /* Set the background color of the html to white */
 html {
-  background-color: white;
+  background-color: #000000;
   margin: 0;
   padding: 0;
 }

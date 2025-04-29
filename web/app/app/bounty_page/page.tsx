@@ -22,7 +22,7 @@ export default function BountyPage() {
     description.trim() !== "";
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f6f6f7] p-4">
+    <div className="min-h-screen w-full flex items-center justify-center bg-#ff6c6c p-4 bg-black">
       <div
         className="w-[96%] max-w-[1600px] min-h-[92vh] bg-cover bg-center rounded-3xl shadow-xl p-12"
         style={{

@@ -7,9 +7,9 @@ export default function AskAI() {
   const [isCodeTouched, setIsCodeTouched] = useState(false);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[#f6f6f7] p-4">
+    <div className="min-h-screen w-full flex  justify-center bg-white p-4 pt-0">
       <div
-        className="w-[96%] max-w-[1600px] min-h-[92vh] bg-cover bg-center rounded-3xl shadow-xl p-12"
+        className="w-[96%] max-w-[1600px] min-h-[92vh] bg-cover bg-center rounded-3xl shadow-xl p-12 mt-4"
         style={{
           backgroundImage: 'url("/images/bruh.svg")',
         }}
