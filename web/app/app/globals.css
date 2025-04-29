@@ -23,4 +23,15 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
 }
+
+/* Set the background color of the html to white */
+html {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+
+
