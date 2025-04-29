@@ -23,12 +23,13 @@ body {
   background: linear-gradient(to bottom, #000000, #000000);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  background-color: black;
 }
 
 
 /* Set the background color of the html to white */
 html {
-  background-color: #000000;
+  background-color: white;
   margin: 0;
   padding: 0;
 }
