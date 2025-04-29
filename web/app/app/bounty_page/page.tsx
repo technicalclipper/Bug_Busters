@@ -7,15 +7,18 @@ export default function BountyPage() {
 
   const [code, setCode] = useState("");
   const [reward, setReward] = useState("");
+  const [contractAddress, setContractAddress] = useState("");
   const [description, setDescription] = useState("");
 
   const [isCodeTouched, setIsCodeTouched] = useState(false);
   const [isRewardTouched, setIsRewardTouched] = useState(false);
+  const [isContractaddressTouched, setContractaddressTouched] = useState(false);
   const [isDescriptionTouched, setIsDescriptionTouched] = useState(false);
 
   const allValid =
     isCodeTouched &&
     isRewardTouched &&
+    isContractaddressTouched &&
     isDescriptionTouched &&
     code.trim() !== "" &&
     reward.trim() !== "" &&
@@ -89,10 +92,22 @@ export default function BountyPage() {
                 </div>
 
                 <div>
-                  <p className="text-lg font-medium text-gray-700">Your Wallet:</p>
-                  <p className="text-gray-600 bg-[#f1f1f1] p-2 rounded-xl mt-1 font-mono text-sm shadow-inner">
-                    {userWallet}
-                  </p>
+                  <label
+                    htmlFor="contract-address"
+                    className="block text-lg font-medium mb-2 text-gray-700"
+                  >
+                    Enter Contract Address:
+                  </label>
+                  <input
+                    id="contract-address"
+                    type="text"
+                    placeholder="Contract Address"
+                    value={contractAddress}
+                    onChange={(e) => setContractAddress(e.target.value)}
+                    onBlur={() => setContractaddressTouched(true)}
+                    className={`w-full p-3 border rounded-2xl shadow-inner bg-[#fafafa] text-gray-800 transition-all duration-500 ease-in-out
+                      ${isRewardTouched ? "border-green-500 ring-4 ring-green-300" : "border-gray-300 ring-0"}`}
+                  />
                 </div>
 
                 <div>
