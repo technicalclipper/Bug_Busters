@@ -97,5 +97,9 @@ contract BugBountyManager {
         return activeBounties;
     }
 
+    function getBountyCounter() external view returns (uint256) {
+    return bountyCounter;
+    }
+
     receive() external payable {}
 }
