@@ -89,7 +89,7 @@ export async function POST(req: NextRequest) {
       
 
     const state = StateFn.root(agent.description);
-    state.messages.push(user(user_prompt)); // Add the user transaction data
+    state.messages.push(user(user_prompt)); // Add the code 
 
     const result = await agent.run(state);
     //@ts-expect-error correct type

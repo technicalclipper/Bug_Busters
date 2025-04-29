@@ -3,6 +3,7 @@ pragma solidity ^0.8.19;
 
 contract BugBountyManager {
     struct Bounty {
+        uint256 bountyId;
         address projectOwner;
         address contractAddress; 
         uint256 rewardAmount;    
@@ -10,7 +11,7 @@ contract BugBountyManager {
     }
 
     uint256 public bountyCounter;
-    mapping(uint256 => Bounty) public bounties; 
+    mapping(uint256 => Bounty) public bounties;
 
     event BountyCreated(uint256 bountyId, address indexed owner, address indexed contractAddress, uint256 rewardAmount);
     event BountyClosed(uint256 bountyId, address indexed hunter, uint256 rewardPaid);
@@ -20,12 +21,13 @@ contract BugBountyManager {
         _;
     }
 
-    // User creates a new bounty
+    // Create a new bounty
     function createBounty(address _contractAddress) external payable returns (uint256) {
         require(msg.value > 0, "Must deposit some reward");
         bountyCounter++;
 
         bounties[bountyCounter] = Bounty({
+            bountyId: bountyCounter,
             projectOwner: msg.sender,
             contractAddress: _contractAddress,
             rewardAmount: msg.value,
@@ -36,15 +38,13 @@ contract BugBountyManager {
         return bountyCounter;
     }
 
-    // AI Agent approves a bug report and pays hunter
+    // AI Agent approves bug and pays hunter
     function approveBug(uint256 bountyId, address payable hunter) external {
-        
-
         Bounty storage bounty = bounties[bountyId];
         require(bounty.isActive, "Bounty closed");
         require(address(this).balance >= bounty.rewardAmount, "Insufficient funds");
 
-        bounty.isActive = false; 
+        bounty.isActive = false;
         uint256 reward = bounty.rewardAmount;
         bounty.rewardAmount = 0;
 
@@ -54,7 +54,7 @@ contract BugBountyManager {
         emit BountyClosed(bountyId, hunter, reward);
     }
 
-    // Project owner can cancel bounty and withdraw 
+    // Owner cancels bounty
     function cancelBounty(uint256 bountyId) external onlyOwner(bountyId) {
         Bounty storage bounty = bounties[bountyId];
         require(bounty.isActive, "Already closed");
@@ -67,11 +67,35 @@ contract BugBountyManager {
         require(success, "Refund failed");
     }
 
-    // View function to list all active bounties 
+    // View single bounty
     function getBounty(uint256 bountyId) external view returns (Bounty memory) {
         return bounties[bountyId];
     }
 
-    
+    // View all active bounties
+    function getAllBounties() external view returns (Bounty[] memory) {
+        uint256 activeCount = 0;
+
+        // First pass: count active bounties
+        for (uint256 i = 1; i <= bountyCounter; i++) {
+            if (bounties[i].isActive) {
+                activeCount++;
+            }
+        }
+
+        Bounty[] memory activeBounties = new Bounty[](activeCount);
+        uint256 index = 0;
+
+        // Second pass: populate array
+        for (uint256 i = 1; i <= bountyCounter; i++) {
+            if (bounties[i].isActive) {
+                activeBounties[index] = bounties[i];
+                index++;
+            }
+        }
+
+        return activeBounties;
+    }
+
     receive() external payable {}
 }
