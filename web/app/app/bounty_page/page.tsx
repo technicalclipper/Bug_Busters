@@ -1,26 +1,114 @@
 'use client';
-
+import { Config } from 'wagmi'
 import { useState } from "react";
+import { useAccount } from "wagmi";
+import {abi} from "../lib/bountyContract";
+import { useReadContract ,useWriteContract} from 'wagmi'
+import { readContract } from '@wagmi/core';
+import { parseEther } from 'viem';
+import { JsonRpcProvider, Contract, N } from "ethers";
+import supabase from '../tools/supabaseConfig';
+
+
 
 export default function BountyPage() {
+
+  const { data: bountyCounter, isLoading, isError } = useReadContract({
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+    abi: abi,
+    functionName: 'getBountyCounter',
+  });
+  
+
+  const { address, isConnected } = useAccount();
   const [code, setCode] = useState("");
+  const [name, setName] = useState("");
   const [reward, setReward] = useState("");
   const [contractAddress, setContractAddress] = useState("");
   const [description, setDescription] = useState("");
-
+  const [bountyno,setBountyNo] = useState(0);
+  const [added,setAdded] = useState(false);
+  
+  const [isNameTouched, setIsNameTouched] = useState(false);
   const [isCodeTouched, setIsCodeTouched] = useState(false);
   const [isRewardTouched, setIsRewardTouched] = useState(false);
   const [isContractaddressTouched, setContractaddressTouched] = useState(false);
   const [isDescriptionTouched, setIsDescriptionTouched] = useState(false);
 
+  const {writeContract,writeContractAsync} = useWriteContract()
+  
+ 
+
   const allValid =
     isCodeTouched &&
+    isNameTouched &&
     isRewardTouched &&
     isContractaddressTouched &&
     isDescriptionTouched &&
     code.trim() !== "" &&
     reward.trim() !== "" &&
     description.trim() !== "";
+
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+
+  const return_no_of_bounty = async () => {
+    
+    const provider = new JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL!); // replace with actual RPC URL
+
+    
+    const contract = new Contract(
+      process.env.NEXT_PUBLIC_CONTRACT_ADDRESS!, 
+      abi,
+      provider
+    );
+
+    try {
+      const bountyCounter = await contract.getBountyCounter();
+      return Number(bountyCounter);
+    } catch (err) {
+      console.error("Contract read failed:", err);
+    }
+  };
+
+
+  const handleUploadBounty = async() => {
+      
+    const txHash = await writeContractAsync({
+      abi,
+      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
+      functionName: 'createBounty',
+      args: [contractAddress], 
+      value: parseEther(reward), 
+      
+    });
+    
+    setAdded(true);
+    await sleep(4000); 
+    
+    const res = await return_no_of_bounty();
+    console.log("Bounty Number:", res);
+    //enter into db in supabase
+    const { data, error } = await supabase.from('bug_bounties').insert([
+      {
+        bno: res, 
+        caddress: contractAddress,
+        saddress: address,
+        code: code,
+        name: name,
+        reward: reward,
+        description: description,
+      },
+    ]);
+  
+    if (error) {
+      console.error('Insert failed:', error);
+    } else {
+      console.log('Insert successful:', data);
+    }
+
+  }
+
 
   return (
     <div className="min-h-screen w-full bg-white px-8 py-16 mt-[60px]">
@@ -72,6 +160,25 @@ export default function BountyPage() {
             <div className="rounded-md border border-gray-300 bg-white shadow-[4px_4px_0_#0a0a23] flex flex-col justify-between">
               <div className="bg-yellow-200 text-sm text-gray-800 px-4 py-2 font-mono border-b border-gray-300 rounded-t-md">
                 Bounty Details
+              
+                </div>
+              <div className="p-4 text-gray-900 space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-semibold mb-1">
+                    Bounty Name:
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="bounty name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    onBlur={() => setIsNameTouched(true)}
+                    className={`w-full p-2 rounded-md text-sm bg-[#fafafa] text-gray-900 transition-all duration-300
+                    ${isRewardTouched ? "border border-green-500 ring-2 ring-green-300" : "border border-gray-300"}`}
+                  />
+                </div>
+              
               </div>
               <div className="p-4 text-gray-900 space-y-6">
                 <div>
@@ -130,6 +237,7 @@ export default function BountyPage() {
                       ? "bg-green-600 text-white hover:bg-green-700 shadow-md"
                       : "border border-[#1c1c42] text-[#1c1c42] bg-white"
                   }`}
+                  onClick={handleUploadBounty}
                 >
                   Upload Bounty →
                 </button>
@@ -141,3 +249,5 @@ export default function BountyPage() {
     </div>
   );
 }
+
+
