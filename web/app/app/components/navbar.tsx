@@ -3,9 +3,16 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { injected } from 'wagmi/connectors';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { address, isConnected } = useAccount();
+  const { connect, pendingConnector } = useConnect({ connectors: [injected()] });
+  const { disconnect } = useDisconnect();
+
+  const shortAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : '';
 
   return (
     <motion.nav
@@ -38,14 +45,24 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Login Button */}
+          {/* Wallet Button */}
           <motion.div whileHover={{ scale: 1.05 }} className="hidden md:block">
-            <Link
-              href="/login"
-              className="bg-black text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-gray-800 transition"
-            >
-              Login
-            </Link>
+            {isConnected ? (
+              <button
+                onClick={disconnect}
+                className="bg-black text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-gray-800 transition"
+              >
+                {shortAddress} ✕
+              </button>
+            ) : (
+              <button
+                onClick={() => connect({ connector: injected() })}
+                disabled={!!pendingConnector}
+                className="bg-black text-white px-6 py-3 rounded-full text-lg font-bold hover:bg-gray-800 transition"
+              >
+                {pendingConnector ? 'Connecting...' : 'Connect Wallet'}
+              </button>
+            )}
           </motion.div>
 
           {/* Mobile Toggle */}
@@ -76,12 +93,22 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <Link
-              href="/login"
-              className="inline-block mt-3 bg-black text-white px-6 py-3 rounded-full font-bold hover:bg-gray-800 transition"
-            >
-              Login
-            </Link>
+            {isConnected ? (
+              <button
+                onClick={disconnect}
+                className="inline-block mt-3 bg-black text-white px-6 py-3 rounded-full font-bold hover:bg-gray-800 transition"
+              >
+                {shortAddress} ✕
+              </button>
+            ) : (
+              <button
+                onClick={() => connect({ connector: injected() })}
+                disabled={!!pendingConnector}
+                className="inline-block mt-3 bg-black text-white px-6 py-3 rounded-full font-bold hover:bg-gray-800 transition"
+              >
+                {pendingConnector ? 'Connecting...' : 'Connect Wallet'}
+              </button>
+            )}
           </motion.div>
         )}
       </div>
