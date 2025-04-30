@@ -33,7 +33,7 @@ export default function BountyPage() {
         />
 
         {/* Main Content */}
-        <div className="relative z-10 p-8">
+        <div className="relative z-10 p-8 mt-5">
           <h1 className="text-4xl font-bold text-center mb-4 flex items-center justify-center space-x-3 text-gray-900">
             <img src="/images/bug.svg" alt="Bug Icon" className="w-10 h-10" />
             <span>Post a Bounty</span>
