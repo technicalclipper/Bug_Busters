@@ -46,10 +46,25 @@ Always include a Security Score (0–100).
 
 Even if no issues are found, return a full report with 100/100 score.
 
-📥 Prompt Used
-text
-Copy
-Edit
+# 🛡️ AI-Powered Smart Contract Bug Bounty System
+
+This project enables a gig economy for Web3 security. AI agents audit and verify smart contracts, while human bug hunters earn rewards for submitting valid vulnerabilities. It uses OpenAI GPT-4 and Covalent Agent SDK to power the AI layer.
+
+---
+
+## 🤖 AI Agent 1: Analyze Agent
+
+### 📌 Purpose
+Analyzes Solidity smart contract code for potential security vulnerabilities and gas optimization issues. Generates a full audit report in a standard format.
+
+### 🧠 Prompt Logic
+- Categorizes vulnerabilities: Reentrancy, Access Control, Arithmetic Bugs, Gas Optimization, etc.
+- Provides detailed location, severity, issue, and suggested fix.
+- Returns a markdown-formatted report with an overall security score.
+- Always returns a full report — even if no vulnerabilities are found (score: 100/100).
+
+### 📥 Prompt Used
+```text
 Carefully analyze the Solidity code for vulnerabilities.
 Follow the exact output format.
 Categorize each vulnerability with severity, location, and fix.
@@ -57,9 +72,7 @@ Always respond with the full report — never summarize in one line.
 Do not add any extra explanation before or after the report.
 If no bugs are found, still return the report with a 100/100 score.
 📤 Output Format
-markdown
-Copy
-Edit
+
 ### Audit Report
 
 **Contract Overview:**  
@@ -76,10 +89,8 @@ Edit
 **Security Score:** [0–100]
 
 **Audit Completed By:** AI Smart Contract Auditor
+
 ✅ Sample Output
-markdown
-Copy
-Edit
 ### Audit Report
 
 **Contract Overview:**  
@@ -102,25 +113,23 @@ This contract is a simple bank allowing users to deposit and withdraw Ether.
 **Security Score:** 50/100
 
 **Audit Completed By:** AI Smart Contract Auditor
+
+
 🧪 AI Agent 2: Verification Agent
 📌 Purpose
 Verifies whether a bug report submitted by a hunter accurately describes a real and valid vulnerability in a given Solidity contract.
 
 🧠 Prompt Logic
-The AI:
+Compares the hunter's bug report with the actual contract code.
 
-Compares the report code (hunter submission) with the uploaded contract code.
+Confirms existence, correctness, and relevance of the reported issue.
 
-Checks if the issue exists, is correctly described, and is relevant.
+Returns a strict JSON format indicating whether the report is valid or not.
 
-Returns a strict JSON format confirming if the report is legit or not.
-
-Prevents abuse by flagging false, trivial, or misreported bugs.
+Prevents false positives and trivial reports.
 
 📥 Prompt Used
-text
-Copy
-Edit
+
 Compare the submitted bug report (review code) to the provided smart contract code.
 Carefully check whether the vulnerability exists and is described correctly.
 Return response strictly as a JSON object: isLegit + reason.
@@ -130,37 +139,36 @@ Do not exceed 1–2 sentences in 'reason'.
 Add the given address in the response, like send the bounty to the address.
 Follow the format exactly as specified.
 Always return the response in JSON format and ensure it can be parsed using JSON.parse.
+
 📤 Output Format
-json
-Copy
-Edit
 {
   "isLegit": true,
   "reason": "[Short valid explanation]",
   "sendTo": "0xHunterAddress"
 }
+
 Or:
 
-json
-Copy
-Edit
 {
   "isLegit": false,
   "reason": "[Short invalid explanation]",
   "sendTo": "0xHunterAddress"
 }
+
+
 ✅ Sample Output
-json
-Copy
-Edit
+
 {
   "isLegit": true,
   "reason": "The report accurately identifies a reentrancy vulnerability in the withdraw function and provides a correct description, location, and fix.",
   "sendTo": "0x1234...abcd"
 }
+
+
 🧰 AI Tools Used
 
 Tool	Purpose
 OpenAI GPT-4 Mini	Core LLM used for smart contract understanding and reasoning
-Covalent AI Agent SDK	Custom agent execution, routing, and prompt management
+Covalent Agent SDK	Custom AI agent execution, prompt orchestration, and message routing
 
+  
