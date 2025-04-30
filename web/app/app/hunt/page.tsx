@@ -37,14 +37,21 @@ const sampleBounties: Bounty[] = [
 
 export default function HuntPage() {
   return (
-    <main className="min-h-screen px-8 py-16 bg-[#fff7f3] text-gray-900 mt-[60px]">
+    <main className="min-h-screen px-8 py-16 bg-white text-gray-900 mt-[60px]">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-5xl font-bold text-center mb-4">Active Bounties</h1>
-        <p className="text-center text-gray-500 mb-12">
-          Explore and solve bounties posted by users to earn rewards.
-        </p>
+      <div className="flex items-center justify-center mb-6">
+      <img src="/images/bug-catcher.png" alt="Bug Catcher" className="w-13 h-13 mr-4" />
+      <h1 className="text-5xl font-bold text-center">Active Bounties</h1>
+    </div>
+        
+        <p className="text-center text-gray-500 mb-6">
+  Explore and solve bounties posted by users to earn rewards.
+</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<hr className="border-t border-gray-300 mb-6" />
+
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
           {sampleBounties.map((bounty) => (
             <div
               key={bounty.id}
